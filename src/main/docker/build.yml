@@ -1,0 +1,11 @@
+version: "2"
+
+services:
+    flair-registry:
+        build: ./
+    flair-registry-version:
+        extends: flair-registry
+        image: ${DOCKER_REGISTRY_URL}/flair-registry:${POM_VERSION}
+    flair-registry-latest:
+        extends: flair-registry
+        image: ${DOCKER_REGISTRY_URL}/flair-registry:latest-${GIT_LOCAL_BRANCH}

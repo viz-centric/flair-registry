@@ -1,0 +1,86 @@
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration is used for unit/integration tests.
+#
+# More information on profiles: https://www.jhipster.tech/profiles/
+# More information on configuration properties: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+spring:
+    application:
+        name: JHipsterRegistry
+    cloud:
+        config:
+            enabled: false
+    mail:
+        host: localhost
+    mvc:
+        favicon:
+            enabled: false
+    security:
+        user:
+            name: admin
+            password: admin
+            roles: USER,ADMIN
+    thymeleaf:
+        mode: HTML
+
+server:
+    port: 10344
+    address: localhost
+
+eureka:
+    client:
+        enabled: true
+        fetch-registry: false
+        register-with-eureka: false
+    server:
+        enable-self-preservation: false
+    instance:
+        instanceId: jhipsterRegistry
+management:
+    endpoints:
+        web:
+            base-path: /management
+# ===================================================================
+# JHipster specific properties
+#
+# Full reference is available at: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+jhipster:
+    async:
+        core-pool-size: 1
+        max-pool-size: 50
+        queue-capacity: 10000
+    security:
+        authentication:
+            jwt:
+                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+                base64-secret: bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=
+                # It is recommended to encrypt the secret key in Base64, using the property above.
+                # For compabitibily issues with applications generated with older JHipster releases,
+                # you can use both `base64-secret` and `secret` fields.
+                secret: my-secret-key-which-should-be-changed-in-production-and-be-base64-encoded
+                # Token is valid 24 hours
+                token-validity-in-seconds: 86400
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+# application:

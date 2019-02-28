@@ -1,0 +1,33 @@
+version: '2'
+# deployment docker compose for flair-registry
+services:
+    flair-registry-dev:
+        container_name: "development-flair-registry"
+        labels:
+            purpose: Flair config server and service discovery
+            environment: development
+            traefik.frontend.rule: "PathPrefixStrip: /flair-registry-dev"
+            traefik.enable: true
+            traefik.backend: flair-registry-dev
+            traefik.docker.network: traefik
+
+        image: ${DOCKER_REGISTRY_URL}/flair-registry:latest-${GIT_LOCAL_BRANCH}
+        volumes:
+        - /home/vizcentric/Documents/flair-configuration:/flair-configuration
+        environment:
+        - JHIPSTER_SLEEP=0
+        - SPRING_PROFILES_ACTIVE=prod
+        - BITBUCKET_URI=${BITBUCKET_URI}
+        - BITBUCKET_USER=${BITBUCKET_USER}
+        - BITBUCKET_PASS=${BITBUCKET_PASS}
+        networks:
+            - dev
+            - traefik
+
+networks:
+    dev:
+        external:
+            name: development
+    traefik:
+        external:
+            name: traefik

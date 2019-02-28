@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+    flairbi-registry:
+        image: jhipster-registry:latest
+        environment:
+        - SPRING_PROFILES_ACTIVE=dev,native
+        - BITBUCKET_URI=${BITBUCKET_URI}
+        - BITBUCKET_USER=${BITBUCKET_USER}
+        - BITBUCKET_PASS=${BITBUCKET_PASS}
+        ports:
+        - 8761:8761
