@@ -74,7 +74,7 @@ steps:
   displayName: 'Build wheel'
 
 - script: |
-  export $(grep -v '^#' ./target/maven-archiver/pom.properties | xargs)
+    export $(grep -v '^#' ./target/maven-archiver/pom.properties | xargs)
   displayName: 'Export properties from maven'
 
 - script: |
