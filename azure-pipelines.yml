@@ -72,6 +72,7 @@ steps:
   displayName: 'Export maven properties'
 
 - script: |
+    export $(grep -v '^#' ./target/maven-archiver/pom.properties | xargs)
     docker build -t flairbi/$artifactId:v$version .
   displayName: 'Build Docker image'
 
