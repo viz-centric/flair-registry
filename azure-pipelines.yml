@@ -67,20 +67,9 @@ steps:
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   displayName: 'Compile, Test, Package & Deploy the artifact'
 
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: 3.6
-    architecture: 'x64'
-
-- script: |
-    python -version
-    pip install wheel setuptools PyYAML psycopg2 boto3 requests avro-python3 confluent_kafka
-    python setup.py sdist bdist_wheel
-  displayName: 'Build wheel'
-
 - script: |
     export $(grep -v '^#' ./target/maven-archiver/pom.properties | xargs)
-  displayName: 'Export properties from maven'
+  displayName: 'Export maven properties'
 
 - script: |
     docker build -t flairbi/$(artifactId):v$(version) .
