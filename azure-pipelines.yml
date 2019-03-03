@@ -66,3 +66,27 @@ steps:
     goals: 'deploy'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   displayName: 'Compile, Test, Package & Deploy the artifact'
+
+- script: |
+    python -version
+    pip install wheel setuptools PyYAML psycopg2 boto3 requests avro-python3 confluent_kafka
+    python setup.py sdist bdist_wheel
+  displayName: 'Build wheel'
+
+- script: |
+  export $(grep -v '^#' ./target/maven-archiver/pom.properties | xargs)
+  displayName: 'Export properties from maven'
+
+- script: |
+    docker build -t flairbi/$(artifactId):v$(version) .
+  displayName: 'Build Docker image'
+
+- script: |
+    docker login -u vizcentric -p $DOCKER_PASSWORD
+    docker push flairbi/$(artifactId):v$(version)
+    docker tag flairbi/$(artifactId):v$(version) flairbi/$(artifactId):latest
+    docker push flairbi/$(artifactId):latest
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  env:
+    DOCKER_PASSWORD: $(dockerPassword)
+  displayName: 'Push Docker image'

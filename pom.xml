@@ -4,11 +4,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.github.jhipster.registry</groupId>
-    <artifactId>jhipster-registry</artifactId>
+    <groupId>com.project.bi</groupId>
+    <artifactId>flair-registry</artifactId>
     <version>4.0.6</version>
     <packaging>war</packaging>
-    <name>JHipster Registry</name>
+    <name>Flair Registry</name>
     <distributionManagement>
         <repository>
             <id>dev-azure-com-vizcentric-flair-registry</id>
@@ -33,7 +33,7 @@
             </snapshots>
         </repository>
     </repositories>
-    <description>JHipster service registry, made with Netflix Eureka and Spring Cloud Config</description>
+    <description>Flair Registry the fork of JHipster service registry, made with Netflix Eureka and Spring Cloud Config</description>
     <properties>
         <!-- Build properties -->
         <maven.version>3.0.0</maven.version>
