@@ -14,8 +14,12 @@ spring:
             server:
                 bootstrap: true
                 composite:
-                    - type: native
-                      search-locations:  file:///E:/Projects/flair/flair-configuration/{application}
+                    - type: git
+                      uri: ${BITBUCKET_URI:https://github.com/viz-centric/flair-config.git}
+                      force-pull: true
+                      deleteUntrackedBranches: true
+                      refreshRate: 5
+                      searchPaths: '{application}'
                # prefix: /config
             fail-fast: true
             # name of the config server's property source (file.yml) that we want to use
