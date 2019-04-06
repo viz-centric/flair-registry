@@ -39,6 +39,7 @@ public class EurekaResource {
 
     /**
      * GET  /eureka/applications : get Eureka applications information
+     * @return entity
      */
     @GetMapping("/eureka/applications")
     @Timed
@@ -73,6 +74,7 @@ public class EurekaResource {
 
     /**
      * GET  /eureka/lastn : get Eureka registrations
+     * @return entity
      */
     @GetMapping("/eureka/lastn")
     @Timed
@@ -98,6 +100,7 @@ public class EurekaResource {
 
     /**
      * GET  /eureka/replicas : get Eureka replicas
+     * @return entity
      */
     @GetMapping("/eureka/replicas")
     @Timed
@@ -120,6 +123,7 @@ public class EurekaResource {
 
     /**
      * GET  /eureka/status : get Eureka status
+     * @return entity
      */
     @GetMapping("/eureka/status")
     @Timed

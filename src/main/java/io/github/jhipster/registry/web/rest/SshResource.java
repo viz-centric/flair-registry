@@ -25,6 +25,7 @@ public class SshResource {
 
     /**
      * GET  / : get the SSH public key
+     * @return entity
      */
     @GetMapping(value = "/ssh/public_key", produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed

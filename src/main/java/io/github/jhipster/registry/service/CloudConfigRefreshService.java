@@ -11,7 +11,16 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -83,8 +92,8 @@ public class CloudConfigRefreshService {
      * {@code WatchService} object to monitor K8s configMap path. Mounted configMap path will be recursively
      * registered with the {@code WatchService} instance to get notified for interested events.
      *
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException error
+     * @throws InterruptedException error
      */
     public void configMapRefreshContext() throws IOException, InterruptedException {
         List<File> fileList = new ArrayList();
