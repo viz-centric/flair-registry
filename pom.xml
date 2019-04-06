@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.project.bi</groupId>
     <artifactId>flair-registry</artifactId>
-    <version>4.0.7-SNAPSHOT</version>
+    <version>4.0.7</version>
     <packaging>war</packaging>
     <name>Flair Registry</name>
 
     <scm>
         <connection>scm:git:https://github.com/viz-centric/flair-registry.git</connection>
         <developerConnection>scm:git:https://github.com/viz-centric/flair-registry.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>flair-registry-4.0.7</tag>
         <url>https://github.com/viz-centric/flair-registry.git</url>
     </scm>
 
@@ -60,8 +57,8 @@
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
         <!-- These remain empty unless the corresponding profile is active -->
-        <profile.no-liquibase/>
-        <profile.swagger/>
+        <profile.no-liquibase />
+        <profile.swagger />
         <!-- Dependency versions -->
         <jhipster-dependencies.version>2.0.28</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
@@ -620,7 +617,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -634,7 +631,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
