@@ -9,6 +9,14 @@
     <version>4.0.7-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Flair Registry</name>
+
+    <scm>
+        <connection>scm:git:https://github.com/viz-centric/flair-registry.git</connection>
+        <developerConnection>scm:git:https://github.com/viz-centric/flair-registry.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/viz-centric/flair-registry.git</url>
+    </scm>
+
     <distributionManagement>
         <repository>
             <id>dev-azure-com-vizcentric-flair-registry</id>
