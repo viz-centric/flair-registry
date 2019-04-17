@@ -1,5 +1,8 @@
 FROM openjdk:8-jre-alpine
 
+LABEL maintainer="admin@vizcentric.com"
+LABEL name="Vizcentric"
+
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     JAVA_OPTS="" \
     JHIPSTER_SLEEP=0
