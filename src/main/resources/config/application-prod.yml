@@ -26,8 +26,6 @@ spring:
         password:
     security:
         user:
-            name: admin
-            password: admin
             role: USER,ADMIN
 
 # ===================================================================
