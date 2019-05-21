@@ -44,9 +44,7 @@
         <maven.version>3.0.0</maven.version>
         <java.version>1.8</java.version>
         <scala.version>2.12.6</scala.version>
-        <node.version>v10.13.0</node.version>
         <npm.version>6.4.1</npm.version>
-        <yarn.version>v1.9.2</yarn.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
@@ -78,18 +76,16 @@
         <mapstruct.version>1.2.0.Final</mapstruct.version>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.2</maven-war-plugin.version>
         <jib-maven-plugin.version>0.9.11</jib-maven-plugin.version>
-        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <dockerfile-maven-plugin.version>1.4.3</dockerfile-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <scala-maven-plugin.version>3.4.2</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
         <git-commit-id-plugin.version>2.2.5</git-commit-id-plugin.version>
         <!-- Sonar properties -->
@@ -119,6 +115,7 @@
         <sonar.sources>${project.basedir}/src/main/</sonar.sources>
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.tests>${project.basedir}/src/test/</sonar.tests>
+        <docker-maven-plugin.version>0.27.2</docker-maven-plugin.version>
         <!-- jhipster-needle-maven-property -->
     </properties>
     <dependencyManagement>
@@ -257,6 +254,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.23.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
@@ -361,6 +364,11 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
                     <version>1.5.1</version>
@@ -432,6 +440,15 @@
                                 <version>[${java.version}.0,)</version>
                             </requireJavaVersion>
                         </rules>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <configuration>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <releaseProfiles>prod</releaseProfiles>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -574,23 +591,6 @@
 
                     Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy
                     <executions><execution><id>default</id><goals><goal>build</goal><goal>push</goal></goals></execution></executions><configuration><useProxy>false</useProxy><repository>jhipster-registry</repository><tag>latest</tag><contextDirectory>${project.build.directory}</contextDirectory></configuration></plugin> -->
-                <plugin>
-                    <groupId>com.github.eirslett</groupId>
-                    <artifactId>frontend-maven-plugin</artifactId>
-                    <version>${frontend-maven-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>install node and yarn</id>
-                            <goals>
-                                <goal>install-node-and-yarn</goal>
-                            </goals>
-                            <configuration>
-                                <nodeVersion>${node.version}</nodeVersion>
-                                <yarnVersion>${yarn.version}</yarnVersion>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
                 <!--
                     This plugin's configuration is used to store Eclipse m2e settings only.
                     It has no influence on the Maven build itself.
@@ -614,20 +614,6 @@
                                         </versionRange>
                                         <goals>
                                             <goal>prepare-agent</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>com.github.eirslett</groupId>
-                                        <artifactId>frontend-maven-plugin</artifactId>
-                                        <versionRange>${frontend-maven-plugin.version}</versionRange>
-                                        <goals>
-                                            <goal>install-node-and-yarn</goal>
-                                            <goal>yarn</goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
@@ -688,30 +674,6 @@
             </properties>
         </profile>
         <profile>
-            <id>webpack</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>webpack build dev</id>
-                                <goals>
-                                    <goal>yarn</goal>
-                                </goals>
-                                <phase>generate-resources</phase>
-                                <configuration>
-                                    <arguments>run webpack:build</arguments>
-                                    <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
             <id>dev</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -754,6 +716,33 @@
                 </dependency>
             </dependencies>
             <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-resources-plugin</artifactId>
+                            <version>${maven-resources-plugin.version}</version>
+                            <executions>
+                                <execution>
+                                    <id>docker-resources</id>
+                                    <phase>validate</phase>
+                                    <goals>
+                                        <goal>copy-resources</goal>
+                                    </goals>
+                                    <configuration>
+                                        <outputDirectory>target/</outputDirectory>
+                                        <resources>
+                                            <resource>
+                                                <directory>src/main/docker/</directory>
+                                                <filtering>false</filtering>
+                                            </resource>
+                                        </resources>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -785,94 +774,48 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>yarn install</id>
-                                <goals>
-                                    <goal>yarn</goal>
-                                </goals>
-                                <configuration>
-                                    <arguments>install --force</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>webpack build test</id>
-                                <goals>
-                                    <goal>yarn</goal>
-                                </goals>
-                                <phase>test</phase>
-                                <configuration>
-                                    <arguments>run webpack:test</arguments>
-                                    <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>webpack build prod</id>
-                                <goals>
-                                    <goal>yarn</goal>
-                                </goals>
-                                <phase>generate-resources</phase>
-                                <configuration>
-                                    <arguments>run webpack:prod --mode production</arguments>
-                                    <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
                         <groupId>com.spotify</groupId>
                         <artifactId>dockerfile-maven-plugin</artifactId>
                         <version>${dockerfile-maven-plugin.version}</version>
-                        <!--<executions>-->
-                        <!--<execution>-->
-                        <!--<id>build-image</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                        <!--<goal>build</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                        <!--<useProxy>false</useProxy>-->
-                        <!--<repository>flair-registry</repository>-->
-                        <!--<tag>latest</tag>-->
-                        <!--<contextDirectory>${project.build.directory}</contextDirectory>-->
-                        <!--</configuration>-->
-                        <!--</execution>-->
-                        <!--<execution>-->
-                        <!--<id>push-version</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                        <!--<goal>tag</goal>-->
-                        <!--<goal>push</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                        <!--<username>admin</username>-->
-                        <!--<password>Centric$81TN</password>-->
-                        <!--<repository>devsupport-vizcentric.com:10003/flair-registry</repository>-->
-                        <!--<tag>${project.version}</tag>-->
-                        <!--</configuration>-->
-                        <!--</execution>-->
-                        <!--<execution>-->
-                        <!--<id>push-latest</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                        <!--<goal>tag</goal>-->
-                        <!--<goal>push</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                        <!--<username>admin</username>-->
-                        <!--<password>Centric$81TN</password>-->
-                        <!--<repository>devsupport-vizcentric.com:10003/flair-registry</repository>-->
-                        <!--<tag>latest</tag>-->
-                        <!--</configuration>-->
-                        <!--</execution>-->
-                        <!--</executions>-->
                         <configuration>
                             <useProxy>false</useProxy>
                             <repository>${project.artifactId}</repository>
                             <tag>latest</tag>
                             <contextDirectory>${project.build.directory}</contextDirectory>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>build-dockerfile</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>push-images</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>push</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>flairbi/${project.artifactId}</name>
+                                    <build>
+                                        <tags>
+                                            <tag>latest</tag>
+                                            <tag>v${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}</dockerFileDir>
+                                    </build>
+                                </image>
+                            </images>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -930,47 +873,6 @@
                     <version>${mapstruct.version}</version>
                 </dependency>
             </dependencies>
-        </profile>
-        <profile>
-            <!--
-                Profile for deploying to Heroku, which cleans up node_modules
-                and other artifacts to reduce slug size.
-            -->
-            <id>heroku</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-clean-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>clean-build-artifacts</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>clean</goal>
-                                </goals>
-                                <configuration>
-                                    <excludeDefaultDirectories>true</excludeDefaultDirectories>
-                                    <filesets>
-                                        <fileset>
-                                            <directory>node_modules</directory>
-                                        </fileset>
-                                        <fileset>
-                                            <directory>.heroku/node</directory>
-                                        </fileset>
-                                        <fileset>
-                                            <directory>target</directory>
-                                            <excludes>
-                                                <exclude>*.war</exclude>
-                                            </excludes>
-                                        </fileset>
-                                    </filesets>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
         <profile>
             <id>m2e</id>
