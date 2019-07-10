@@ -5,7 +5,7 @@ services:
         container_name: "flair-registry"
         labels:
             purpose: Flair config server and service discovery
-        image: flairbi/flair-registry:latest
+        image: flairbi/flair-registry:${TAG}
         volumes:
         - /home/vizcentric/Documents/flair-configuration:/flair-configuration
         environment:
