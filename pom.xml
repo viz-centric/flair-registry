@@ -819,7 +819,7 @@
                                     <name>flairbi/${project.artifactId}</name>
                                     <build>
                                         <tags>
-                                            <tag>latest</tag>
+                                            <tag>${DOCKER_TAG:latest}</tag>
                                             <tag>v${project.version}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}</dockerFileDir>
