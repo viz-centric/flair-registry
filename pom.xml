@@ -817,8 +817,7 @@
                                     <name>flairbi/${project.artifactId}</name>
                                     <build>
                                         <tags>
-                                            <tag>${DOCKER_TAG:latest}</tag>
-                                            <tag>v${project.version}</tag>
+                                            <tag>v${project.version}.${revision}</tag>
                                         </tags>
                                         <dockerFileDir>${project.build.directory}</dockerFileDir>
                                     </build>
