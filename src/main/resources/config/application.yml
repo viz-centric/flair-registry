@@ -45,10 +45,15 @@ zuul:
 management:
     endpoints:
         web:
-            base-path: /management
+            base-path: /
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump", "logfile"]
+                include:
+                    - health
+                    - info
+                    - prometheus
     endpoint:
+        prometheus:
+            enabled: true
         health:
             show-details: when_authorized
     health:
