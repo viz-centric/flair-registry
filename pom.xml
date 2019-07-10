@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.project.bi</groupId>
     <artifactId>flair-registry</artifactId>
-    <version>5.0.3-SNAPSHOT</version>
+    <version>5.0.3</version>
     <packaging>war</packaging>
     <name>Flair Registry</name>
 
     <scm>
         <connection>scm:git:https://github.com/viz-centric/flair-registry.git</connection>
         <developerConnection>scm:git:https://github.com/viz-centric/flair-registry.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v5.0.3</tag>
         <url>https://github.com/viz-centric/flair-registry.git</url>
     </scm>
 
