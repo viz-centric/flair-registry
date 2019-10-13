@@ -45,20 +45,30 @@ zuul:
 management:
     endpoints:
         web:
-            base-path: /
+            base-path: /management
             exposure:
-                include:
-                    - health
-                    - info
-                    - prometheus
+                include: ["configprops", "env", "health", "info", "jhimetrics", "logfile", "loggers", "threaddump"]
     endpoint:
-        prometheus:
-            enabled: true
         health:
             show-details: when_authorized
     health:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
+    metrics:
+        enable:
+            http: true
+            jvm: true
+            logback: true
+            process: true
+            system: true
+        distribution:
+            percentiles-histogram:
+                all: true
+            percentiles:
+                all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
+        web:
+            server:
+                auto-time-requests: true
 
 # ===================================================================
 # Eureka server configuration (eureka.server.*)

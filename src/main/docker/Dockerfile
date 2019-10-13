@@ -1,21 +1,20 @@
-FROM openjdk:12
-
-LABEL maintainer="admin@vizcentric.com"
-LABEL name="Vizcentric"
+FROM openjdk:11-jre-slim-stretch
 
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
-    JAVA_OPTS="" \
-    JHIPSTER_SLEEP=0
+    JHIPSTER_SLEEP=0 \
+    JAVA_OPTS=""
 
-VOLUME /tmp
-EXPOSE 8761
+# Add a jhipster user to run our application so that it doesn't need to run as root
+RUN adduser -D -s /bin/sh jhipster
+WORKDIR /home/jhipster
 
-ADD https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/v0.3.0/grpc_health_probe-linux-amd64 /bin/grpc_health_probe
-COPY *.war /app.war
+ADD entrypoint.sh entrypoint.sh
+RUN chmod 755 entrypoint.sh && chown jhipster:jhipster entrypoint.sh
+USER jhipster
 
-RUN chmod +x /bin/grpc_health_probe
+ENTRYPOINT ["./entrypoint.sh"]
 
-CMD echo "The application will start in ${JHIPSTER_SLEEP}s..." && \
-    sleep ${JHIPSTER_SLEEP} && \
-    java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app.war
+EXPOSE 8080 5701/udp
+
+ADD *.war app.war
 

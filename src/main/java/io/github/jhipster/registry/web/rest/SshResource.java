@@ -1,6 +1,5 @@
 package io.github.jhipster.registry.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,10 +24,8 @@ public class SshResource {
 
     /**
      * GET  / : get the SSH public key
-     * @return entity
      */
     @GetMapping(value = "/ssh/public_key", produces = MediaType.TEXT_PLAIN_VALUE)
-    @Timed
     public ResponseEntity<String> eureka() {
         try {
             String publicKey = getPublicKey();

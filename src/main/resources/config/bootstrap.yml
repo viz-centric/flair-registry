@@ -14,13 +14,9 @@ spring:
             server:
                 bootstrap: true
                 composite:
-                    - type: git
-                      uri: ${BITBUCKET_URI:https://github.com/viz-centric/flair-config.git}
-                      force-pull: true
-                      deleteUntrackedBranches: true
-                      refreshRate: 5
-                      searchPaths: '{application}'
-               # prefix: /config
+                    - type: native
+                      search-locations: file:./central-config
+                prefix: /config
             fail-fast: true
             # name of the config server's property source (file.yml) that we want to use
             name: jhipster-registry

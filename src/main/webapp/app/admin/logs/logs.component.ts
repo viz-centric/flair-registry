@@ -18,7 +18,9 @@ export class LogsComponent implements OnInit, OnDestroy {
     reverse: boolean;
 
     activeRoute: Route;
-    subscription: Subscription;
+    routes: Route[];
+    activeRouteSubscription: Subscription;
+    routesSubscription: Subscription;
 
     constructor(private logsService: LogsService, private routesService: JhiRoutesService) {
         this.filter = '';
@@ -28,30 +30,42 @@ export class LogsComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loggers = [];
-        this.subscription = this.routesService.routeChanged$.subscribe((route) => {
+        this.activeRouteSubscription = this.routesService.routeChanged$.subscribe(route => {
             this.activeRoute = route;
             this.displayActiveRouteLogs();
+        });
+
+        this.routesSubscription = this.routesService.routesChanged$.subscribe(routes => {
+          this.routes = routes;
         });
     }
 
     changeLevel(name: string, level: string) {
-        const log = new Log(name, level);
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.logsService.changeInstanceLevel(this.activeRoute, log).subscribe(() => {
-                this.logsService.findInstanceAll(this.activeRoute).subscribe((response) => (this.loggers = response.body));
+            this.logsService.changeInstanceLevel(this.searchByAppName(), name, level).subscribe(() => {
+                this.logsService.findInstanceAll(this.activeRoute).subscribe(response => this.extractLoggers(response));
             });
         }
+    }
+
+    searchByAppName() {
+      return this.routes.filter(route => {
+        return route.appName === this.activeRoute.appName;
+      });
+    }
+
+    private extractLoggers(response) {
+      this.loggers = Object.entries(response.body.loggers)
+        .map(e => new Log(e[0], e[1]['effectiveLevel']));
     }
 
     displayActiveRouteLogs() {
         this.updatingLogs = true;
         if (this.activeRoute && this.activeRoute.status !== 'DOWN') {
-            this.logsService.findInstanceAll(this.activeRoute).subscribe(
-                (response) => {
-                    this.loggers = response.body;
+            this.logsService.findInstanceAll(this.activeRoute).subscribe(response => {
+                    this.extractLoggers(response);
                     this.updatingLogs = false;
-                },
-                (error) => {
+                }, error => {
                     if (error.status === 503 || error.status === 500 || error.status === 404) {
                         this.updatingLogs = false;
                         if (error.status === 500 || error.status === 404) {
@@ -67,6 +81,7 @@ export class LogsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         // prevent memory leak when component destroyed
-        this.subscription.unsubscribe();
+        this.activeRouteSubscription.unsubscribe();
+        this.routesSubscription.unsubscribe();
     }
 }

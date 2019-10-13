@@ -1,6 +1,5 @@
 package io.github.jhipster.registry.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.config.ConfigurationManager;
 import com.netflix.discovery.shared.Application;
@@ -11,6 +10,7 @@ import com.netflix.eureka.registry.PeerAwareInstanceRegistryImpl;
 import com.netflix.eureka.resources.StatusResource;
 import com.netflix.eureka.util.StatusInfo;
 import io.github.jhipster.registry.web.rest.vm.EurekaVM;
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -39,10 +39,8 @@ public class EurekaResource {
 
     /**
      * GET  /eureka/applications : get Eureka applications information
-     * @return entity
      */
     @GetMapping("/eureka/applications")
-    @Timed
     public ResponseEntity<EurekaVM> eureka() {
         EurekaVM eurekaVM = new EurekaVM();
         eurekaVM.setApplications(getApplications());
@@ -74,10 +72,8 @@ public class EurekaResource {
 
     /**
      * GET  /eureka/lastn : get Eureka registrations
-     * @return entity
      */
     @GetMapping("/eureka/lastn")
-    @Timed
     public ResponseEntity<Map<String, Map<Long, String>>> lastn() {
         Map<String, Map<Long, String>> lastn = new HashMap<>();
         PeerAwareInstanceRegistryImpl registry = (PeerAwareInstanceRegistryImpl) getRegistry();
@@ -100,10 +96,8 @@ public class EurekaResource {
 
     /**
      * GET  /eureka/replicas : get Eureka replicas
-     * @return entity
      */
     @GetMapping("/eureka/replicas")
-    @Timed
     public ResponseEntity<List<String>> replicas() {
         List<String> replicas = new ArrayList<>();
         getServerContext().getPeerEurekaNodes().getPeerNodesView().forEach(
@@ -123,10 +117,8 @@ public class EurekaResource {
 
     /**
      * GET  /eureka/status : get Eureka status
-     * @return entity
      */
     @GetMapping("/eureka/status")
-    @Timed
     public ResponseEntity<EurekaVM> eurekaStatus() {
 
         EurekaVM eurekaVM = new EurekaVM();

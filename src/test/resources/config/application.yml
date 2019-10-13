@@ -19,6 +19,8 @@ spring:
     cloud:
         config:
             enabled: false
+    main:
+        allow-bean-definition-overriding: true
     mail:
         host: localhost
     mvc:
@@ -71,8 +73,6 @@ jhipster:
                 secret: my-secret-key-which-should-be-changed-in-production-and-be-base64-encoded
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
 
 # ===================================================================
 # Application specific properties

@@ -1,66 +1,49 @@
+#
+# Copyright 2013-2019 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 pool:
-  vmImage: 'Ubuntu 16.04'
-
-trigger:
-  # batch: true
-  branches:
-    include:
-    - master
-    - feature/*
-    - bug/*
-
-pr:
-  branches:
-    include:
-    - master
+    vmImage: 'ubuntu-latest'
 
 steps:
-- checkout: self
-  persistCredentials: true
-
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: 3.6
-    architecture: 'x64'
-
-- script: |
-    python --version
-    pip --version
-    pip install awscli
-  displayName: 'Environment Preperation'
-
-- script: |
-    mkdir .tmp
-    cd .tmp
-    aws s3 cp s3://vizcentric-pipeline-secrets/settings.xml .
-    mkdir ~/.m2
-    cp ./settings.xml ~/.m2/settings.xml
-    cd ../
-  env:
-    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-  displayName: 'Get Secrets'
-
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.12'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
-    goals: 'package'
-  condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
-  displayName: 'Package'
-
-- script: |
-    git checkout master
-    git config user.name "Release Bot"
-    git config user.email "admin@vizcentric.com"
-    mvn -B release:clean release:prepare release:perform -Dusername=${GIT_USERNAME} -Dpassword=${GIT_PASSWORD} "-DscmCommentPrefix=[skip ci] "
-  env:
-    GIT_USERNAME: $(GIT_USERNAME)
-    GIT_PASSWORD: $(GIT_PASSWORD)
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  displayName: 'Release'
+    - task: NodeTool@0
+      inputs:
+        versionSpec: "10.16.3"
+      displayName: "Install Node.js"
+    - script: npm install -g npm
+      displayName: 'TOOLS: update NPM'
+    - script: npm install
+      displayName: 'Install dependencies'
+    - script: |
+        ./mvnw -ntp test
+      displayName: 'TEST: Back'
+    - script: |
+        npm test
+      displayName: 'TEST: Front'
+    - script: docker build -t jhipster/jhipster-registry:travis .
+      displayName: 'Build Docker image'
+    - script: |
+        docker images
+        docker run --name jhipster-registry -p 8761:8761 -d -t jhipster/jhipster-registry:travis
+      displayName: 'Run application'
+    - script: |
+          sleep 90
+          docker ps
+          docker logs jhipster-registry
+          curl -v http://localhost:8761
+      displayName: 'Check if app is running'

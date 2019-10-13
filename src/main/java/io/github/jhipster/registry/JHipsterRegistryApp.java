@@ -1,9 +1,11 @@
 package io.github.jhipster.registry;
 
-import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.registry.config.ApplicationProperties;
 import io.github.jhipster.registry.config.ConfigServerConfig;
 import io.github.jhipster.registry.config.DefaultProfileUtil;
+
+import io.github.jhipster.config.JHipsterConstants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -14,9 +16,11 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.core.env.Environment;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -60,6 +64,7 @@ public class JHipsterRegistryApp {
      * Main method, used to run the application.
      *
      * @param args the command line arguments
+     * @throws UnknownHostException if the local host name could not be resolved into an address
      */
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(JHipsterRegistryApp.class);
