@@ -118,6 +118,7 @@
         <docker-maven-plugin.version>0.27.2</docker-maven-plugin.version>
         <!-- jhipster-needle-maven-property -->
 
+        <maven.scm.provider.gitexe>1.9.5</maven.scm.provider.gitexe>
         <project.scm.id>github-credentials</project.scm.id>
     </properties>
     <dependencyManagement>
@@ -460,6 +461,13 @@
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <releaseProfiles>prod</releaseProfiles>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.maven.scm</groupId>
+                            <artifactId>maven-scm-provider-gitexe</artifactId>
+                            <version>${maven.scm.provider.gitexe}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
