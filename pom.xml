@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.project.bi</groupId>
     <artifactId>flair-registry</artifactId>
-    <version>7.0.0</version>
+    <version>7.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Flair Registry</name>
 
