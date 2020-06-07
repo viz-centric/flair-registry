@@ -68,7 +68,7 @@
     "karma-webpack": "2.0.13",
     "lazypipe": "1.0.1",
     "lint-staged": "7.0.0",
-    "lodash": "4.17.4",
+    "lodash": "4.17.13",
     "map-stream": "0.0.7",
     "node-sass": "4.5.3",
     "phantomjs-prebuilt": "2.1.16",
