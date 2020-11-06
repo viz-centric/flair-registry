@@ -8,23 +8,22 @@
     <name>Flair Registry</name>
 
     <scm>
-        <connection>scm:git:https://github.com/viz-centric/flair-registry.git</connection>
-        <developerConnection>scm:git:https://github.com/viz-centric/flair-registry.git</developerConnection>
-        <tag>v6.0.0</tag>
-        <url>https://github.com/viz-centric/flair-registry.git</url>
+        <connection>scm:git:${project.scm.url}</connection>
+        <url>${project.scm.url}</url>
+        <developerConnection>scm:git:${project.scm.url}</developerConnection>
     </scm>
 
     <distributionManagement>
         <repository>
-            <id>dev-azure-com-vizcentric-flair-registry</id>
-            <url>https://pkgs.dev.azure.com/VizCentric/_packaging/flair-registry/maven/v1</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <id>aws-release</id>
+            <name>AWS Release Repository</name>
+            <url>s3://${bucket.name}/release</url>
         </repository>
+        <snapshotRepository>
+            <id>aws-snapshot</id>
+            <name>AWS Snapshot Repository</name>
+            <url>s3://${bucket.name}/snapshot</url>
+        </snapshotRepository>
     </distributionManagement>
     <repositories>
         <repository>
@@ -40,6 +39,8 @@
     </repositories>
     <description>Flair Registry the fork of JHipster service registry, made with Netflix Eureka and Spring Cloud Config</description>
     <properties>
+        <aws-maven.version>5.0.0.RELEASE</aws-maven.version>
+        <bucket.name>vizcentric-mvn-repo</bucket.name>
         <!-- Build properties -->
         <maven.version>3.0.0</maven.version>
         <java.version>1.8</java.version>
@@ -120,6 +121,7 @@
 
         <maven.scm.provider.gitexe>1.9.5</maven.scm.provider.gitexe>
         <project.scm.id>github-credentials</project.scm.id>
+        <project.scm.url>https://github.com/viz-centric/flair-registry.git</project.scm.url>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -371,6 +373,13 @@
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.springframework.build</groupId>
+                <artifactId>aws-maven</artifactId>
+                <version>${aws-maven.version}</version>
+            </extension>
+        </extensions>
         <defaultGoal>spring-boot:run</defaultGoal>
         <pluginManagement>
             <plugins>
